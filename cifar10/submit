@@ -1,0 +1,2 @@
+sqsub -q gpu -r 7d --mpp 200G -o train.log python Deep_ResNet.py 9
+sqsub -q gpu -r 7d --mpp 200G -o train_wide_resnet.log python -u train_nn.py wide 3 8
