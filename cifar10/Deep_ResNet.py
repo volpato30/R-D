@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-
+#!/opt/sharcnet/python/2.7.5/gcc/bin/python
 """
 Lasagne implementation of CIFAR-10 examples from "Deep Residual Learning for Image Recognition" (http://arxiv.org/abs/1512.03385)
 
@@ -78,8 +77,8 @@ def load_data():
 
 # ##################### Build the neural network model #######################
 
-from lasagne.layers import Conv2DLayer as ConvLayer
-#from lasagne.layers.dnn import Conv2DDNNLayer as ConvLayer
+#from lasagne.layers import Conv2DLayer as ConvLayer
+from lasagne.layers.dnn import Conv2DDNNLayer as ConvLayer
 from lasagne.layers import ElemwiseSumLayer
 from lasagne.layers import InputLayer
 from lasagne.layers import DenseLayer
