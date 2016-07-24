@@ -180,7 +180,7 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False, augment=False
 
 # ############################## Main program ################################
 
-def main(n=5, num_epochs=82, model=None):
+def main(n=5, model=None):
     # Check if cifar data exists
     if not os.path.exists("./cifar-10-batches-py"):
         print("CIFAR-10 dataset can not be found. Please download the dataset from 'https://www.cs.toronto.edu/~kriz/cifar.html'.")
@@ -233,4 +233,4 @@ def main(n=5, num_epochs=82, model=None):
     np.savez('./learned_features/cifar10_deep_ResNet_fetures.npz', train_feature, test_feature)
 
 if __name__ == '__main__':
-    main('cifar10_deep_residual_model.npz')
+    main(5, 'cifar10_deep_residual_model.npz')
