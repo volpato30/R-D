@@ -215,7 +215,7 @@ def main(n=5, model=None):
     lasagne.layers.set_all_param_values(network, param_values)
 
     train_feature = np.zeros((100000,64))
-    test_feature = np.zeros((50000,64))
+    test_feature = np.zeros((10000,64))
     # Calculate validation error of model:
     i = 0
     for batch in iterate_minibatches(X_train, Y_train, 500, shuffle=False):

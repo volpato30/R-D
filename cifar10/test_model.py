@@ -62,7 +62,7 @@ Load data and make predictions
 test_X, test_y = load_pickle_data_test()
 
 # load network weights
-f = gzip.open('data/weights/%s%d_resnet.pklz'%(variant,depth), 'rb')
+f = gzip.open('weights/%s%d_resnet.pklz'%(variant,depth), 'rb')
 all_params = pickle.load(f)
 f.close()
 helper.set_all_param_values(output_layer, all_params)
