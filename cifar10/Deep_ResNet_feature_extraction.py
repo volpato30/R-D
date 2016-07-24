@@ -230,7 +230,7 @@ def main(n=5, model=None):
         out = feature_fn(inputs)
         test_feature[i*500:(i+1)*500,:] = out
         i += 1
-    np.savez('./learned_features/cifar10_deep_ResNet_fetures.npz', train_feature,\
+    np.savez('./learned_features/cifar10_deep_ResNet_features.npz', train_feature,\
         Y_train, test_feature, Y_test)
 
 if __name__ == '__main__':
