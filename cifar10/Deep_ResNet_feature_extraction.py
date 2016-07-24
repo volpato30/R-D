@@ -233,4 +233,4 @@ def main(n=5, model=None):
     np.savez('./learned_features/cifar10_deep_ResNet_fetures.npz', train_feature, test_feature)
 
 if __name__ == '__main__':
-    main(5, 'cifar10_deep_residual_model.npz')
+    main(9, 'cifar10_deep_residual_model.npz')
