@@ -1,11 +1,21 @@
 import sys
 import os
 import time
+import string
+import random
+import pickle
 import numpy as np
 import theano
 import theano.tensor as T
 import lasagne
 from utils import load_pickle_data_cv
+
+def unpickle(file):
+    import cPickle
+    fo = open(file, 'rb')
+    dict = cPickle.load(fo)
+    fo.close()
+    return dict
 
 def load_data():
     xs = []
