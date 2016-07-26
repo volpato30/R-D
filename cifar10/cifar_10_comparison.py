@@ -172,10 +172,10 @@ class RandomCNN(object):
             test_feature[i*500:(i+1)*500,:] = out
             i += 1
         lr = LR(C=1)
-        lr_auc = train_and_eval( lr, X_train, Y_train, X_test, Y_test )
+        lr_auc = train_and_eval( lr, train_feature, Y_train, test_feature, Y_test )
         self.lr_acc.append(lr_auc)
         svm=SVC(kernel='linear',C=1,shrinking=False)
-        svm_auc = train_and_eval( svm, X_train, Y_train, X_test, Y_test )
+        svm_auc = train_and_eval( svm, train_feature, Y_train, test_feature, Y_test )
         self.svm_acc.append(svm_auc)
         print("lr accuracy:\t\t{:.2f} %  svm accuracy:\t\t{:.2f} %".format(100*lr_auc,100*svm_auc))
 
