@@ -150,7 +150,6 @@ class RandomCNN(object):
     def experiment(self):
         input_var = T.tensor4('inputs')
         target_var = T.ivector('targets')
-        network = build_cnn(input_var, num_conv, mid_neurons)
         feature_layer = build_cnn(input_var, num_conv, mid_neurons)
         feature = lasagne.layers.get_output(feature_layer, deterministic=True)
         feature_fn = theano.function([input_var], feature)
