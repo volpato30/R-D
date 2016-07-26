@@ -13,9 +13,6 @@ def unpickle(file):
     fo.close()
     return dict
 
-
-# In[9]:
-
 def load_data():
     xs = []
     ys = []
@@ -119,7 +116,7 @@ X_train = data['X_train']
 Y_train = data['Y_train']
 X_test = data['X_test']
 Y_test = data['Y_test']
-
+X_train = X_train[:50000,:,:,:]
 
 # In[13]:
 
@@ -157,7 +154,7 @@ class RandomCNN(object):
         feature_layer = build_cnn(input_var, num_conv, mid_neurons)
         feature = lasagne.layers.get_output(feature_layer, deterministic=True)
         feature_fn = theano.function([input_var], feature)
-        train_feature = np.zeros((100000,mid_neurons))
+        train_feature = np.zeros((50000,mid_neurons))
         test_feature = np.zeros((10000,mid_neurons))
         i = 0
         for batch in iterate_minibatches(X_train, Y_train, 500, shuffle=False):
@@ -179,15 +176,9 @@ class RandomCNN(object):
         self.svm_acc.append(svm_auc)
         print("lr accuracy:\t\t{:.2f} %  svm accuracy:\t\t{:.2f} %".format(100*lr_auc,100*svm_auc))
 
-
-# In[ ]:
-
 randc = RandomCNN()
 for i in range(5):
     randc.experiment()
-
-
-# In[ ]:
 
 num_conv = 32
 mid_neurons = 512
