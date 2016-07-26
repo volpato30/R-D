@@ -70,18 +70,14 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
             excerpt = slice(start_idx, start_idx + batchsize)
         yield inputs[excerpt], targets[excerpt]
 
-def build_cnn(input_var=None, num_conv = 32, mid_neurons = 256):
+def build_cnn(input_var=None, num_conv = 64, mid_neurons = 256):
     # As a third model, we'll create a CNN of two convolution + pooling stages
     # and a fully-connected hidden layer in front of the output layer.
 
     # Input layer, as usual:
     network = lasagne.layers.InputLayer(shape=(None, 1, 32, 32),
                                         input_var=input_var)
-    # This time we do not apply input dropout, as it tends to work less well
-    # for convolutional layers.
 
-    # Convolutional layer with 32 kernels of size 5x5. Strided and padded
-    # convolutions are supported as well; see the docstring.
     network = lasagne.layers.Conv2DLayer( #28*28
             network, num_filters=num_conv, filter_size=(5, 5),
             nonlinearity=lasagne.nonlinearities.rectify,
