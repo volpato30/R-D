@@ -138,12 +138,6 @@ def train_and_eval( model, train_x, train_y, test_x, test_y ):
 # svm_auc = train_and_eval( svm, X_flat_train, Y_train,  X_flat_test, Y_test )
 # print 'benchmark accuracy: \t\t{:.2f} %'.format(100*svm_auc))
 
-# In[ ]:
-
-svm_auc
-
-
-# In[ ]:
 
 num_conv = 32
 mid_neurons = 256
