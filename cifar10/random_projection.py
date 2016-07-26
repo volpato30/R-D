@@ -105,14 +105,12 @@ def build_cnn(input_var=None, num_conv = 32, mid_neurons = 256):
             nonlinearity=lasagne.nonlinearities.rectify,
             W=lasagne.init.Orthogonal('relu'))
 
-    # A fully-connected layer of 256 units with 50% dropout on its inputs:
     network = lasagne.layers.DenseLayer(
             network,
             num_units=mid_neurons,
             nonlinearity=lasagne.nonlinearities.rectify,
             W=lasagne.init.Orthogonal('relu'))
 
-    # And, finally, the 10-unit output layer with 50% dropout on its inputs:
     network = lasagne.layers.DenseLayer(
             network,
             num_units=10,
@@ -120,7 +118,7 @@ def build_cnn(input_var=None, num_conv = 32, mid_neurons = 256):
 
     return network
 #
-def main(num_conv=5, mid_neurons=256):
+def main(num_conv=64, mid_neurons=256):
     # Check if cifar data exists
     if not os.path.exists("./cifar-10-batches-py"):
         print("CIFAR-10 dataset can not be found. Please download the dataset from 'https://www.cs.toronto.edu/~kriz/cifar.html'.")
@@ -179,5 +177,5 @@ if __name__ == '__main__':
         if len(sys.argv) > 1:
             kwargs['num_conv'] = int(sys.argv[1])
         if len(sys.argv) > 2:
-            kwargs['mid_neurons'] = sys.argv[2]
+            kwargs['mid_neurons'] = int(sys.argv[2])
         main(**kwargs)
