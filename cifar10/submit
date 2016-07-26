@@ -1,4 +1,4 @@
 sqsub -q gpu -r 7d --mpp 200G -o train.log python Deep_ResNet.py 9
 sqsub -q gpu -r 7d --mpp 200G -o train_wide_resnet.log python -u train_nn.py wide 3 8
 sqsub -q gpu -r 7d --mpp 200G -o ./learned_features/DRN_feature.log python Deep_ResNet_feature_extraction.py
-sqsub -q gpu -r 7d --mpp 200G -o ./learned_features/lenet_random_feature.log python -u random_projection.py 5 256
+sqsub -q gpu -r 7d --mpp 200G -o ./learned_features/lenet_random_feature.log python -u random_projection.py 32 256
