@@ -21,11 +21,11 @@ def load_data():
     xs = []
     ys = []
     for j in range(5):
-      d = unpickle('cifar-10-batches-py/data_batch_'+`j+1`)
-      x = d['data']
-      y = d['labels']
-      xs.append(x)
-      ys.append(y)
+        d = unpickle('cifar-10-batches-py/data_batch_'+`j+1`)
+        x = d['data']
+        y = d['labels']
+        xs.append(x)
+        ys.append(y)
 
     d = unpickle('cifar-10-batches-py/test_batch')
     xs.append(d['data'])
