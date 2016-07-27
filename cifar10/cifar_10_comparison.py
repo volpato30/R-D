@@ -117,6 +117,7 @@ Y_train = data['Y_train']
 X_test = data['X_test']
 Y_test = data['Y_test']
 X_train = X_train[:50000,:,:,:]
+Y_train = Y_train[:50000]
 
 # In[13]:
 
