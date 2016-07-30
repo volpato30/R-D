@@ -64,13 +64,13 @@ def build_ARE(input_var=None):
                                    conv1.filter_size, stride=conv1.stride, crop=0,
                                    W=conv1.W, flip_filters=not conv1.flip_filters)
     reshape3 = ReshapeLayer(deconv4, shape =(([0], -1)))
-    return reshape3
+    return reshape3, encode_size
 #
 class ARE(object):
     def __init__(self, lambda1 = 0, lambda2 = 5e-5):
         self.input_var = T.tensor4('inputs')
         self.target_var = T.matrix('targets')
-        self.are_net = build_ARE(self.input_var)
+        self.are_net, encode_size = build_ARE(self.input_var)
         self.reconstructed = lasagne.layers.get_output(self.are_net)
         self.encode_layer, _ = get_layer_by_name(self.are_net, 'encode')
         self.action_layer, _ = get_layer_by_name(self.are_net, 'action')
