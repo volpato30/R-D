@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 LABEL = sys.argv[1] if len(sys.argv) > 1 else '0'
 ENCODE_SIZE = int(sys.argv[2]) if len(sys.argv) > 2 else 64
-WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer_encode_size{}'.format(ENCODE_SIZE)+LABEL+'.npz'
+WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer_NonBindW_encode_size{}'.format(ENCODE_SIZE)'.npz'
 
 with np.load('./data/lena_data.npz') as f:
             data = [f['arr_%d' % i] for i in range(len(f.files))]
@@ -167,11 +167,14 @@ class ARE(object):
                     np.savez(WEIGHT_FILE_NAME, *lasagne.layers.get_all_param_values(self.are_net))
 # main part
 lena_are = ARE()
+lena_are.l_r.set_value(0.1)
+lena_are.train_ARE_network(num_epochs=10, verbose = True, save_model = True)
+lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.05)
-lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=100, verbose = True, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.01)
-lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=500, verbose = True, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.005)
-lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=500, verbose = True, save_model = True)
