@@ -1,1 +1,5 @@
-sqsub -q gpu -r 2d --mpp 200G -o train1.log python ARE_transposeCnn_linearLayer.py 1
+sqsub -q gpu -r 2d --mpp 200G -o train2.log python -u ARE_transposeCnn_linearLayer.py 2
+sqsub -q gpu -r 2d --mpp 200G -o train3.log python -u ARE_transposeCnn_linearLayer.py 3
+sqsub -q gpu -r 2d --mpp 200G -o train4.log python -u ARE_transposeCnn_linearLayer.py 4
+sqsub -q gpu -r 2d --mpp 200G -o train5.log python -u ARE_transposeCnn_linearLayer.py 5
+sqsub -q gpu -r 2d --mpp 200G -o train6.log python -u ARE_transposeCnn_linearLayer.py 6
