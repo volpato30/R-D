@@ -156,7 +156,8 @@ class ARE(object):
             if verbose:
                 print("Epoch {} of {} took {:.3f}s".format(
                     epoch + 1, num_epochs, time.time() - start_time))
-                print("training loss:\t\t{:.6f}".format(float(train_err))
+                print("training loss:\t\t{:.6f}".format(float(train_err)))
+
             if save_model:
                 if train_err < self.best_err:
                     print('save best model which has train_err: {:.7f}'.format(self.best_err))
