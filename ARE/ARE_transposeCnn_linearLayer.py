@@ -8,8 +8,8 @@ sys.setrecursionlimit(10000)
 
 import numpy as np
 import lasagne
-from lasagne.layers import Conv2DLayer, TransposedConv2DLayer, ReshapeLayer, DenseLayer
-from lasagne.layers import get_output, InputLayer, DenseLayer, Upscale2DLayer, ReshapeLayer
+from lasagne.layers import Conv2DLayer, TransposedConv2DLayer, ReshapeLayer, DenseLayer, InputLayer
+from lasagne.layers import get_output, Upscale2DLayer
 from lasagne.nonlinearities import rectify, leaky_rectify, tanh
 from lasagne.updates import nesterov_momentum
 from lasagne.regularization import regularize_layer_params, l2, l1
@@ -22,6 +22,11 @@ import matplotlib.pyplot as plt
 LABEL = sys.argv[1] if len(sys.argv) > 1 else '0'
 WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer'+LABEL+'.npz'
 
+with np.load('./data/lena_data.npz') as f:
+            data = [f['arr_%d' % i] for i in range(len(f.files))]
+X_forward, X_forward_out, X_backward, X_backward_out = data
+# X_forward shape : (100,40,1,72,72)
+
 def get_layer_by_name(net, name):
     for i, layer in enumerate(lasagne.layers.get_all_layers(net)):
         if layer.name == name:
@@ -29,7 +34,8 @@ def get_layer_by_name(net, name):
     return None, None
 
 def build_ARE(input_var=None):
-    conv1 = Conv2DLayer((None, 1, 72, 72), 16, 6, stride=2, pad=0)
+    l_in = InputLayer(shape=(None,  X_forward.shape[2], X_forward.shape[3], X_forward.shape[4]),input_var=input_var)
+    conv1 = Conv2DLayer(l_in, 16, 6, stride=2, pad=0)
     conv2 = Conv2DLayer(conv1, 32, 6, stride = 2, pad = 0)
     conv3 = Conv2DLayer(conv2, 32, 5, stride = 2, pad = 0)
     conv4 = Conv2DLayer(conv3, 32, 4, stride = 2, pad = 0)
@@ -157,9 +163,6 @@ class ARE(object):
                     np.savez(WEIGHT_FILE_NAME, *lasagne.layers.get_all_param_values(self.are_net))
 
 # main part
-with np.load('./data/lena_data.npz') as f:
-            data = [f['arr_%d' % i] for i in range(len(f.files))]
-X_forward, X_forward_out, X_backward, X_backward_out = data
 
 lena_are = ARE()
 lena_are.train_ARE_network(num_epochs=50, verbose = True, save_model = True)
