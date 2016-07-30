@@ -143,7 +143,7 @@ class ARE(object):
             print("Starting training...")
         for epoch in range(num_epochs):
             start_time = time.time()
-            train_error = 0
+            train_err = 0
             for i in range(X_forward.shape[0]):
                 self.set_action_layer(1)
                 train_err1 = self.train_fn(X_forward[i], X_forward_out[i])
@@ -152,10 +152,11 @@ class ARE(object):
                 train_err2 = self.train_fn(X_backward[i], X_backward_out[i])
                 self.get_action_layer(2)
                 train_err += (train_err1 + train_err2)/2
+            train_err = train_err/float(X_forward.shape[0])
             if verbose:
                 print("Epoch {} of {} took {:.3f}s".format(
                     epoch + 1, num_epochs, time.time() - start_time))
-                print("training loss:\t\t{:.6f}".format(float(train_err)/X_forward.shape[0]))
+                print("training loss:\t\t{:.6f}".format(float(train_err))
             if save_model:
                 if train_err < self.best_err:
                     print('save best model which has train_err: {:.7f}'.format(self.best_err))
