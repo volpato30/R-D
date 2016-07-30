@@ -167,13 +167,13 @@ class ARE(object):
 # main part
 
 lena_are = ARE()
-lena_are.train_ARE_network(num_epochs=50, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.005)
-lena_are.train_ARE_network(num_epochs=100, verbose = False, save_model = True)
+lena_are.train_ARE_network(num_epochs=1000, verbose = False, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.001)
-lena_are.train_ARE_network(num_epochs=50, verbose = False, save_model = True)
+lena_are.train_ARE_network(num_epochs=1000, verbose = False, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.0005)
-lena_are.train_ARE_network(num_epochs=50, verbose = False, save_model = True)
+lena_are.train_ARE_network(num_epochs=1000, verbose = False, save_model = True)
