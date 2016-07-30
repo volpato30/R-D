@@ -19,6 +19,8 @@ import time
 import matplotlib
 import matplotlib.pyplot as plt
 
+LABEL = sys.argv[1] if len(sys.argv) > 1 else '0'
+WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer'+LABEL+'.npz'
 
 def get_layer_by_name(net, name):
     for i, layer in enumerate(lasagne.layers.get_all_layers(net)):
@@ -88,7 +90,7 @@ class ARE(object):
         # self.action4_w = np.eye(encode_size, dtype = np.float32)
         # self.action4_b = np.zeros(encode_size, dtype = np.float32)
 
-    def load_pretrained_model(self, file_name='./weights/ARE_transposeConv_linearLayer.npz'):
+    def load_pretrained_model(self, file_name=WEIGHT_FILE_NAME):
         with np.load(file_name) as f:
             param_values = [f['arr_%d' % i] for i in range(len(f.files))]
         lasagne.layers.set_all_param_values(self.are_net, param_values)
@@ -152,7 +154,7 @@ class ARE(object):
                 if train_err < self.best_err:
                     print('save best model which has train_err: {:.7f}'.format(self.best_err))
                     self.best_err = train_err
-                    np.savez('./weights/ARE_transposeConv_linearLayer.npz', *lasagne.layers.get_all_param_values(self.are_net))
+                    np.savez(WEIGHT_FILE_NAME, *lasagne.layers.get_all_param_values(self.are_net))
 
 # main part
 with np.load('./data/lena_data.npz') as f:
@@ -160,7 +162,6 @@ with np.load('./data/lena_data.npz') as f:
 X_forward, X_forward_out, X_backward, X_backward_out = data
 
 lena_are = ARE()
-
 lena_are.train_ARE_network(num_epochs=50, verbose = True, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.005)

@@ -1,0 +1,1 @@
+sqsub -q gpu -r 2d --mpp 200G -o train1.log python ARE_transposeCnn_linearLayer.py 1
