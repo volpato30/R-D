@@ -9,7 +9,7 @@ sys.setrecursionlimit(10000)
 import numpy as np
 import lasagne
 from lasagne.layers import Conv2DLayer, TransposedConv2DLayer, ReshapeLayer, DenseLayer, InputLayer
-from lasagne.layers import get_output, Upscale2DLayer
+from lasagne.layers import get_output, Upscale2DLayer, TransformerLayer
 from lasagne.nonlinearities import rectify, leaky_rectify, tanh
 from lasagne.updates import nesterov_momentum
 from lasagne.regularization import regularize_network_params,regularize_layer_params, l2, l1
@@ -40,19 +40,7 @@ def build_ARE(input_var=None, encode_size = 64):
     conv2 = Conv2DLayer(conv1, 32, 6, stride = 2, pad = 0)
     conv3 = Conv2DLayer(conv2, 64, 5, stride = 2, pad = 0)
     conv4 = Conv2DLayer(conv3, 128, 4, stride = 2, pad = 0)
-    reshape1 = ReshapeLayer(conv4, shape =(([0], -1)))
-
-    mid_size = np.prod(conv4.output_shape[1:])
-
-    encode_layer = DenseLayer(reshape1, name= 'encode', num_units= encode_size, W=lasagne.init.Orthogonal(1.0),\
-                                  nonlinearity=lasagne.nonlinearities.rectify)
-
-    action_layer = DenseLayer(encode_layer, name= 'action', num_units= encode_size, W=lasagne.init.Orthogonal(1.0),\
-                                  nonlinearity=None)
-    mid_layer = DenseLayer(action_layer, num_units = mid_size, W=  W=lasagne.init.Orthogonal(1.0), nonlinearity=None )
-
-    reshape2 = ReshapeLayer(mid_layer, shape =(([0], conv4.output_shape[1], conv4.output_shape[2], conv4.output_shape[3])))
-
+    action_layer
     deconv1 = TransposedConv2DLayer(reshape2, conv4.input_shape[1],
                                    conv4.filter_size, stride=conv4.stride, crop=0,
                                    W=conv4.W, flip_filters=not conv4.flip_filters)
@@ -168,10 +156,13 @@ class ARE(object):
 # main part
 lena_are = ARE()
 lena_are.l_r.set_value(0.05)
-lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=2000, verbose = True, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.01)
-lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=3000, verbose = False, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.005)
-lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=2000, verbose = False, save_model = True)
+lena_are.load_pretrained_model()
+lena_are.l_r.set_value(0.001)
+lena_are.train_ARE_network(num_epochs=1000, verbose = False, save_model = True)
