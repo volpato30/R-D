@@ -12,7 +12,7 @@ from lasagne.layers import Conv2DLayer, TransposedConv2DLayer, ReshapeLayer, Den
 from lasagne.layers import get_output, Upscale2DLayer
 from lasagne.nonlinearities import rectify, leaky_rectify, tanh
 from lasagne.updates import nesterov_momentum
-from lasagne.regularization import regularize_layer_params, l2, l1
+from lasagne.regularization import regularize_network_params,regularize_layer_params, l2, l1
 import theano
 import theano.tensor as T
 import time
