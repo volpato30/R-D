@@ -9,7 +9,7 @@ sys.setrecursionlimit(10000)
 import numpy as np
 import lasagne
 from lasagne.layers import Conv2DLayer, TransposedConv2DLayer, ReshapeLayer, DenseLayer, InputLayer
-from lasagne.layers import get_output, Upscale2DLayer, TransformerLayer
+from lasagne.layers import get_output, Upscale2DLayer
 from lasagne.nonlinearities import rectify, leaky_rectify, tanh
 from lasagne.updates import nesterov_momentum
 from lasagne.regularization import regularize_network_params,regularize_layer_params, l2, l1
@@ -36,23 +36,35 @@ def get_layer_by_name(net, name):
 
 def build_ARE(input_var=None, encode_size = 64):
     l_in = InputLayer(shape=(None,  X_forward.shape[2], X_forward.shape[3], X_forward.shape[4]),input_var=input_var)
-    conv1 = Conv2DLayer(l_in, 16, 6, stride=2, pad=0)
-    conv2 = Conv2DLayer(conv1, 32, 6, stride = 2, pad = 0)
-    conv3 = Conv2DLayer(conv2, 64, 5, stride = 2, pad = 0)
-    conv4 = Conv2DLayer(conv3, 128, 4, stride = 2, pad = 0)
-    action_layer
+    conv1 = Conv2DLayer(l_in, 16, 6, stride=2, W=lasagne.init.Orthogonal('relu'), pad=0)
+    conv2 = Conv2DLayer(conv1, 32, 6, stride = 2, W=lasagne.init.Orthogonal('relu'), pad = 0)
+    conv3 = Conv2DLayer(conv2, 64, 5, stride = 2, W=lasagne.init.Orthogonal('relu'), pad = 0)
+    conv4 = Conv2DLayer(conv3, 128, 4, stride = 2, W=lasagne.init.Orthogonal('relu'), pad = 0)
+    reshape1 = ReshapeLayer(conv4, shape =(([0], -1)))
+
+    mid_size = np.prod(conv4.output_shape[1:])
+
+    encode_layer = DenseLayer(reshape1, name= 'encode', num_units= encode_size, W=lasagne.init.Orthogonal('relu'),\
+                                  nonlinearity=lasagne.nonlinearities.rectify)
+
+    action_layer = DenseLayer(encode_layer, name= 'action', num_units= encode_size, W=lasagne.init.Orthogonal(1.0),\
+                                  nonlinearity=None)
+    mid_layer = DenseLayer(action_layer, num_units = mid_size, W=lasagne.init.Orthogonal('relu'), nonlinearity=lasagne.nonlinearities.rectify)
+
+    reshape2 = ReshapeLayer(mid_layer, shape =(([0], conv4.output_shape[1], conv4.output_shape[2], conv4.output_shape[3])))
+
     deconv1 = TransposedConv2DLayer(reshape2, conv4.input_shape[1],
                                    conv4.filter_size, stride=conv4.stride, crop=0,
-                                   W=conv4.W, flip_filters=not conv4.flip_filters)
+                                   W=lasagne.init.Orthogonal('relu'), flip_filters=not conv4.flip_filters)
     deconv2 = TransposedConv2DLayer(deconv1, conv3.input_shape[1],
                                    conv3.filter_size, stride=conv3.stride, crop=0,
-                                   W=conv3.W, flip_filters=not conv3.flip_filters)
+                                   W=lasagne.init.Orthogonal('relu'), flip_filters=not conv3.flip_filters)
     deconv3 = TransposedConv2DLayer(deconv2, conv2.input_shape[1],
                                    conv2.filter_size, stride=conv2.stride, crop=0,
-                                   W=conv2.W, flip_filters=not conv2.flip_filters)
+                                   W=lasagne.init.Orthogonal('relu'), flip_filters=not conv2.flip_filters)
     deconv4 = TransposedConv2DLayer(deconv3, conv1.input_shape[1],
                                    conv1.filter_size, stride=conv1.stride, crop=0,
-                                   W=conv1.W, flip_filters=not conv1.flip_filters)
+                                   W=lasagne.init.Orthogonal('relu'), flip_filters=not conv1.flip_filters)
     reshape3 = ReshapeLayer(deconv4, shape =(([0], -1)))
     return reshape3
 #
@@ -156,13 +168,10 @@ class ARE(object):
 # main part
 lena_are = ARE()
 lena_are.l_r.set_value(0.05)
-lena_are.train_ARE_network(num_epochs=2000, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.01)
-lena_are.train_ARE_network(num_epochs=3000, verbose = False, save_model = True)
+lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)
 lena_are.load_pretrained_model()
 lena_are.l_r.set_value(0.005)
-lena_are.train_ARE_network(num_epochs=2000, verbose = False, save_model = True)
-lena_are.load_pretrained_model()
-lena_are.l_r.set_value(0.001)
-lena_are.train_ARE_network(num_epochs=1000, verbose = False, save_model = True)
+lena_are.train_ARE_network(num_epochs=1000, verbose = True, save_model = True)

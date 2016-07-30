@@ -1,4 +1,9 @@
-sqsub -q gpu -r 2d --mpp 200G -o train1_32.log python -u ARE_transposeCnn_linearLayer.py 1 32
-sqsub -q gpu -r 2d --mpp 200G -o train2_64.log python -u ARE_transposeCnn_linearLayer.py 2 64
-sqsub -q gpu -r 2d --mpp 200G -o train3_128.log python -u ARE_transposeCnn_linearLayer.py 3 128
-sqsub -q gpu -r 2d --mpp 200G -o train4_256.log python -u ARE_transposeCnn_linearLayer.py 4 256
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_1_32.log python -u ARE_transposeCnn_linearLayer.py 1 32
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_2_64.log python -u ARE_transposeCnn_linearLayer.py 2 64
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_3_128.log python -u ARE_transposeCnn_linearLayer.py 3 128
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_4_256.log python -u ARE_transposeCnn_linearLayer.py 4 256
+
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_1_32.log python -u ARE_transposeCnn_NonBindW.py 1 32
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_2_64.log python -u ARE_transposeCnn_NonBindW.py 2 64
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_3_128.log python -u ARE_transposeCnn_NonBindW.py 3 128
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_4_256.log python -u ARE_transposeCnn_NonBindW.py 4 256

@@ -36,20 +36,20 @@ def get_layer_by_name(net, name):
 
 def build_ARE(input_var=None, encode_size = 64):
     l_in = InputLayer(shape=(None,  X_forward.shape[2], X_forward.shape[3], X_forward.shape[4]),input_var=input_var)
-    conv1 = Conv2DLayer(l_in, 16, 6, stride=2, pad=0)
-    conv2 = Conv2DLayer(conv1, 32, 6, stride = 2, pad = 0)
-    conv3 = Conv2DLayer(conv2, 64, 5, stride = 2, pad = 0)
-    conv4 = Conv2DLayer(conv3, 128, 4, stride = 2, pad = 0)
+    conv1 = Conv2DLayer(l_in, 16, 6, stride=2, W=lasagne.init.Orthogonal('relu'), pad=0)
+    conv2 = Conv2DLayer(conv1, 32, 6, stride = 2, W=lasagne.init.Orthogonal('relu'), pad = 0)
+    conv3 = Conv2DLayer(conv2, 64, 5, stride = 2, W=lasagne.init.Orthogonal('relu'), pad = 0)
+    conv4 = Conv2DLayer(conv3, 128, 4, stride = 2, W=lasagne.init.Orthogonal('relu'), pad = 0)
     reshape1 = ReshapeLayer(conv4, shape =(([0], -1)))
 
     mid_size = np.prod(conv4.output_shape[1:])
 
-    encode_layer = DenseLayer(reshape1, name= 'encode', num_units= encode_size, W=lasagne.init.Orthogonal(1.0),\
+    encode_layer = DenseLayer(reshape1, name= 'encode', num_units= encode_size, W=lasagne.init.Orthogonal('relu'),\
                                   nonlinearity=lasagne.nonlinearities.rectify)
 
     action_layer = DenseLayer(encode_layer, name= 'action', num_units= encode_size, W=lasagne.init.Orthogonal(1.0),\
                                   nonlinearity=None)
-    mid_layer = DenseLayer(action_layer, num_units = mid_size, W=  W=lasagne.init.Orthogonal(1.0), nonlinearity=None )
+    mid_layer = DenseLayer(action_layer, num_units = mid_size, W=lasagne.init.Orthogonal('relu'), nonlinearity=lasagne.nonlinearities.rectify)
 
     reshape2 = ReshapeLayer(mid_layer, shape =(([0], conv4.output_shape[1], conv4.output_shape[2], conv4.output_shape[3])))
 
