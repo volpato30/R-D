@@ -88,7 +88,7 @@ class ARE(object):
         # self.action4_w = np.eye(encode_size, dtype = np.float32)
         # self.action4_b = np.zeros(encode_size, dtype = np.float32)
 
-    def load_pretrained_model(self, file_name='./weight/ARE_transposeConv_linearLayer.npz'):
+    def load_pretrained_model(self, file_name='./weights/ARE_transposeConv_linearLayer.npz'):
         with np.load(file_name) as f:
             param_values = [f['arr_%d' % i] for i in range(len(f.files))]
         lasagne.layers.set_all_param_values(self.are_net, param_values)
@@ -152,7 +152,7 @@ class ARE(object):
                 if train_err < self.best_err:
                     print('save best model which has train_err: {:.7f}'.format(self.best_err))
                     self.best_err = train_err
-                    np.savez('./weight/ARE_transposeConv_linearLayer', *lasagne.layers.get_all_param_values(self.are_net))
+                    np.savez('./weights/ARE_transposeConv_linearLayer.npz', *lasagne.layers.get_all_param_values(self.are_net))
 
 # main part
 with np.load('./data/lena_data.npz') as f:
