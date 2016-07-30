@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 LABEL = sys.argv[1] if len(sys.argv) > 1 else '0'
 ENCODE_SIZE = int(sys.argv[2]) if len(sys.argv) > 2 else 64
-WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer_NonBindW_encode_size{}'.format(ENCODE_SIZE)'.npz'
+WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer_NonBindW_encode_size{}'.format(ENCODE_SIZE)+'.npz'
 
 with np.load('./data/lena_data.npz') as f:
             data = [f['arr_%d' % i] for i in range(len(f.files))]
