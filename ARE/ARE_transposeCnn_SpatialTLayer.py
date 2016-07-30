@@ -28,7 +28,7 @@ b[0, 0] = 1
 b[1, 1] = 1
 b = b.flatten()  # identity transform
 W = lasagne.init.Constant(0.0)
-W0 = np.zeros((256,6), dtype=np.float32)
+W0 = np.zeros((CONV_NUM*4,6), dtype=np.float32)
 b0 = b
 
 with np.load('./data/lena_data.npz') as f:
