@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 LABEL = sys.argv[1] if len(sys.argv) > 1 else '0'
 CONV_NUM = int(sys.argv[2]) if len(sys.argv) > 2 else 64
-WEIGHT_FILE_NAME = './weights/ARE_transposeConv_SpatialTLayer_CONV_SIZE{}'.format(CONV_SIZE)+LABEL+'.npz'
+WEIGHT_FILE_NAME = './weights/ARE_transposeConv_SpatialTLayer_CONV_NUM{}'.format(CONV_NUM)+LABEL+'.npz'
 
 b = np.zeros((2, 3), dtype='float32')
 b[0, 0] = 1

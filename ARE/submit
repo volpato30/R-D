@@ -9,4 +9,4 @@ sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_3_128.log python -u
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_4_256.log python -u ARE_transposeCnn_NonBindW.py 4 256
 
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_SpatialT_1_64.log python -u ARE_transposeCnn_SpatialTLayer.py 1 64
-sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_spatialT_2_128.log python -u ARE_transposeCnn_SpatialTLayer.py 2 128
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_SpatialT_2_128.log python -u ARE_transposeCnn_SpatialTLayer.py 2 128
