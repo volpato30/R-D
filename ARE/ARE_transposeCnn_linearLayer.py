@@ -1,5 +1,5 @@
-import os, sys, urllib, gzip
 from __future__ import print_function
+import os, sys, urllib, gzip
 try:
     import cPickle as pickle
 except:
