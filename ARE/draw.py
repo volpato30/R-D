@@ -80,7 +80,7 @@ class DrawARE(ARE):
         return self.feature(input_data)
 
     def draw_trajectory(self, num):
-        arr = np.arange(len(X_forward.shape[0]))
+        arr = np.arange(X_forward.shape[0])
         np.random.shuffle(arr)
         t_list = arr[:num]
         for i in t_list:
