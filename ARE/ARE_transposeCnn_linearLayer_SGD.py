@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 LABEL = sys.argv[1] if len(sys.argv) > 1 else '0'
 ENCODE_SIZE = int(sys.argv[2]) if len(sys.argv) > 2 else 64
-WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer_NonBindW_encode_size{}'.format(ENCODE_SIZE)+'.npz'
+WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer_BindW_SGD_encode_size{}'.format(ENCODE_SIZE)+'.npz'
 
 with np.load('./data/lena_data.npz') as f:
             data = [f['arr_%d' % i] for i in range(len(f.files))]
@@ -55,21 +55,21 @@ def build_ARE(input_var=None, encode_size = 64):
 
     deconv1 = TransposedConv2DLayer(reshape2, conv4.input_shape[1],
                                    conv4.filter_size, stride=conv4.stride, crop=0,
-                                   W=lasagne.init.Orthogonal('relu'), flip_filters=not conv4.flip_filters)
+                                   W=conv4.W, flip_filters=not conv4.flip_filters)
     deconv2 = TransposedConv2DLayer(deconv1, conv3.input_shape[1],
                                    conv3.filter_size, stride=conv3.stride, crop=0,
-                                   W=lasagne.init.Orthogonal('relu'), flip_filters=not conv3.flip_filters)
+                                   W=conv3.W, flip_filters=not conv3.flip_filters)
     deconv3 = TransposedConv2DLayer(deconv2, conv2.input_shape[1],
                                    conv2.filter_size, stride=conv2.stride, crop=0,
-                                   W=lasagne.init.Orthogonal('relu'), flip_filters=not conv2.flip_filters)
+                                   W=conv2.W, flip_filters=not conv2.flip_filters)
     deconv4 = TransposedConv2DLayer(deconv3, conv1.input_shape[1],
                                    conv1.filter_size, stride=conv1.stride, crop=0,
-                                   W=lasagne.init.Orthogonal('relu'), flip_filters=not conv1.flip_filters)
+                                   W=conv1.W, flip_filters=not conv1.flip_filters)
     reshape3 = ReshapeLayer(deconv4, shape =(([0], -1)))
     return reshape3
 #
 class ARE(object):
-    def __init__(self, lambda1 = 0, lambda2 = 0):
+    def __init__(self):
         self.input_var = T.tensor4('inputs')
         self.target_var = T.matrix('targets')
         self.are_net = build_ARE(self.input_var, ENCODE_SIZE)
@@ -80,13 +80,11 @@ class ARE(object):
         self.transformed_feature = lasagne.layers.get_output(self.action_layer)
         self.l1_penalty = regularize_network_params(self.are_net, l1)
         self.loss = lasagne.objectives.squared_error(self.reconstructed, self.target_var)
-        self.XXT = T.dot(self.encoded_feature, self.encoded_feature.transpose()) + T.dot(self.transformed_feature, self.transformed_feature.transpose())
-        self.loss = self.loss.mean() + lambda1 * self.l1_penalty + lambda2 * self.XXT.trace()
-        self.loss = self.loss.mean() + lambda1 * self.l1_penalty
+        self.loss = self.loss.mean()
         self.params = lasagne.layers.get_all_params(self.are_net, trainable=True)
         self.l_r = theano.shared(np.array(0.01, dtype=theano.config.floatX))
-        self.updates = lasagne.updates.nesterov_momentum(
-            self.loss, self.params, learning_rate=self.l_r, momentum=0.90)
+        self.updates = lasagne.updates.sgd(
+            self.loss, self.params, learning_rate=self.l_r)
         self.train_fn = theano.function([self.input_var, self.target_var], self.loss, updates=self.updates,on_unused_input='warn')
         self.best_err = 999
         self.action1_w = np.eye(ENCODE_SIZE, dtype = np.float32)

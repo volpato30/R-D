@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 LABEL = sys.argv[1] if len(sys.argv) > 1 else '0'
 ENCODE_SIZE = int(sys.argv[2]) if len(sys.argv) > 2 else 64
-WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer_NonBindW_encode_size{}'.format(ENCODE_SIZE)+'.npz'
+WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer_NonBindW_AdaGrad_encode_size{}'.format(ENCODE_SIZE)+'.npz'
 
 with np.load('./data/lena_data.npz') as f:
             data = [f['arr_%d' % i] for i in range(len(f.files))]
@@ -69,7 +69,7 @@ def build_ARE(input_var=None, encode_size = 64):
     return reshape3
 #
 class ARE(object):
-    def __init__(self, lambda1 = 0, lambda2 = 0):
+    def __init__(self):
         self.input_var = T.tensor4('inputs')
         self.target_var = T.matrix('targets')
         self.are_net = build_ARE(self.input_var, ENCODE_SIZE)
@@ -80,23 +80,15 @@ class ARE(object):
         self.transformed_feature = lasagne.layers.get_output(self.action_layer)
         self.l1_penalty = regularize_network_params(self.are_net, l1)
         self.loss = lasagne.objectives.squared_error(self.reconstructed, self.target_var)
-        self.XXT = T.dot(self.encoded_feature, self.encoded_feature.transpose()) + T.dot(self.transformed_feature, self.transformed_feature.transpose())
-        self.loss = self.loss.mean() + lambda1 * self.l1_penalty + lambda2 * self.XXT.trace()
-        self.loss = self.loss.mean() + lambda1 * self.l1_penalty
+        self.loss = self.loss.mean()
         self.params = lasagne.layers.get_all_params(self.are_net, trainable=True)
-        self.l_r = theano.shared(np.array(0.01, dtype=theano.config.floatX))
-        self.updates = lasagne.updates.nesterov_momentum(
-            self.loss, self.params, learning_rate=self.l_r, momentum=0.90)
+        self.updates = lasagne.updates.adadelta(self.loss, self.params)
         self.train_fn = theano.function([self.input_var, self.target_var], self.loss, updates=self.updates,on_unused_input='warn')
         self.best_err = 999
         self.action1_w = np.eye(ENCODE_SIZE, dtype = np.float32)
         self.action1_b = np.zeros(ENCODE_SIZE, dtype = np.float32)
         self.action2_w = np.eye(ENCODE_SIZE, dtype = np.float32)
         self.action2_b = np.zeros(ENCODE_SIZE, dtype = np.float32)
-        # self.action3_w = np.eye(ENCODE_SIZE, dtype = np.float32)
-        # self.action3_b = np.zeros(ENCODE_SIZE, dtype = np.float32)
-        # self.action4_w = np.eye(ENCODE_SIZE, dtype = np.float32)
-        # self.action4_b = np.zeros(ENCODE_SIZE, dtype = np.float32)
 
     def load_pretrained_model(self, file_name=WEIGHT_FILE_NAME):
         with np.load(file_name) as f:
@@ -135,11 +127,6 @@ class ARE(object):
         else:
             raise Exception('not a valid action')
 
-
-    def reset_loss(self, lambda1 = 0, lambda2 = 0):
-        self.loss = lasagne.objectives.squared_error(self.reconstructed, self.target_var)
-        self.loss = self.loss.mean() + lambda1 * self.l1_penalty + lambda2 * self.XXT.trace()
-
     def train_ARE_network(self, num_epochs=50, verbose = True, save_model = False):
         if verbose:
             print("Starting training...")
@@ -169,14 +156,7 @@ class ARE(object):
                     np.savez(WEIGHT_FILE_NAME, *lasagne.layers.get_all_param_values(self.are_net))
 # main part
 lena_are = ARE()
-lena_are.l_r.set_value(0.1)
-lena_are.train_ARE_network(num_epochs=10, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
 lena_are.load_pretrained_model()
-lena_are.l_r.set_value(0.05)
-lena_are.train_ARE_network(num_epochs=100, verbose = True, save_model = True)
+lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
 lena_are.load_pretrained_model()
-lena_are.l_r.set_value(0.01)
-lena_are.train_ARE_network(num_epochs=500, verbose = True, save_model = True)
-lena_are.load_pretrained_model()
-lena_are.l_r.set_value(0.005)
-lena_are.train_ARE_network(num_epochs=500, verbose = True, save_model = True)

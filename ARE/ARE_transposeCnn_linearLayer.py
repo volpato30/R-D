@@ -69,7 +69,7 @@ def build_ARE(input_var=None, encode_size = 64):
     return reshape3
 #
 class ARE(object):
-    def __init__(self, lambda1 = 0, lambda2 = 5e-6):
+    def __init__(self, lambda1 = 0, lambda2 = 0):
         self.input_var = T.tensor4('inputs')
         self.target_var = T.matrix('targets')
         self.are_net = build_ARE(self.input_var, ENCODE_SIZE)
@@ -86,7 +86,7 @@ class ARE(object):
         self.params = lasagne.layers.get_all_params(self.are_net, trainable=True)
         self.l_r = theano.shared(np.array(0.01, dtype=theano.config.floatX))
         self.updates = lasagne.updates.nesterov_momentum(
-            self.loss, self.params, learning_rate=self.l_r, momentum=0.975)
+            self.loss, self.params, learning_rate=self.l_r, momentum=0.90)
         self.train_fn = theano.function([self.input_var, self.target_var], self.loss, updates=self.updates,on_unused_input='warn')
         self.best_err = 999
         self.action1_w = np.eye(ENCODE_SIZE, dtype = np.float32)
@@ -136,7 +136,7 @@ class ARE(object):
             raise Exception('not a valid action')
 
 
-    def reset_loss(self, lambda1 = 0, lambda2 = 5e-6):
+    def reset_loss(self, lambda1 = 0, lambda2 = 0):
         self.loss = lasagne.objectives.squared_error(self.reconstructed, self.target_var)
         self.loss = self.loss.mean() + lambda1 * self.l1_penalty + lambda2 * self.XXT.trace()
 
@@ -146,15 +146,17 @@ class ARE(object):
         for epoch in range(num_epochs):
             start_time = time.time()
             train_err = 0
+            self.set_action_layer(1)
             for i in range(X_forward.shape[0]):
-                self.set_action_layer(1)
                 train_err1 = self.train_fn(X_forward[i], X_forward_out[i])
-                self.get_action_layer(1)
-                self.set_action_layer(2)
+                train_err += (train_err1)
+            self.get_action_layer(1)
+            self.set_action_layer(2)
+            for i in range(X_forward.shape[0]):
                 train_err2 = self.train_fn(X_backward[i], X_backward_out[i])
-                self.get_action_layer(2)
-                train_err += (train_err1 + train_err2)/2
-            train_err = train_err/float(X_forward.shape[0])
+                train_err += (train_err2)
+            self.get_action_layer(2)
+            train_err = train_err/float(2 * X_forward.shape[0])
             if verbose:
                 print("Epoch {} of {} took {:.3f}s".format(
                     epoch + 1, num_epochs, time.time() - start_time))

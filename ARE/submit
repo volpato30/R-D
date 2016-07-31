@@ -3,10 +3,24 @@ sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_2_64.log python -u ARE
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_3_128.log python -u ARE_transposeCnn_linearLayer.py 3 128
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_4_256.log python -u ARE_transposeCnn_linearLayer.py 4 256
 
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_sgd_1_32.log python -u ARE_transposeCnn_linearLayer_SGD.py 1 32
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_sgd_2_64.log python -u ARE_transposeCnn_linearLayer_SGD.py 2 64
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_sgd_3_128.log python -u ARE_transposeCnn_linearLayer_SGD.py 3 128
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_sgd_4_256.log python -u ARE_transposeCnn_linearLayer_SGD.py 4 256
+
+
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_1_32.log python -u ARE_transposeCnn_NonBindW.py 1 32
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_2_64.log python -u ARE_transposeCnn_NonBindW.py 2 64
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_3_128.log python -u ARE_transposeCnn_NonBindW.py 3 128
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_4_256.log python -u ARE_transposeCnn_NonBindW.py 4 256
 
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_1_32.log python -u ARE_transposeCnn_NonBindW_AdaDelta.py 1 32
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_2_64.log python -u ARE_transposeCnn_NonBindW_AdaDelta.py 2 64
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_3_128.log python -u ARE_transposeCnn_NonBindW_AdaDelta.py 3 128
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_4_256.log python -u ARE_transposeCnn_NonBindW_AdaDelta.py 4 256
+
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_SpatialT_1_64.log python -u ARE_transposeCnn_SpatialTLayer.py 1 64
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_SpatialT_2_128.log python -u ARE_transposeCnn_SpatialTLayer.py 2 128
+
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_SpatialT_SGD_1_64.log python -u ARE_transposeCnn_SpatialTLayer_SGD.py 1 64
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_SpatialT_SGD_2_128.log python -u ARE_transposeCnn_SpatialTLayer_SGD.py 2 128
