@@ -17,6 +17,8 @@ import theano
 import theano.tensor as T
 import time
 import matplotlib
+matplotlib.use('Agg')
+
 import matplotlib.pyplot as plt
 from ARE_transposeCnn_NonBindW_AdaDelta import ARE
 from sklearn.decomposition import PCA
