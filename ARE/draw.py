@@ -91,7 +91,7 @@ class DrawARE(ARE):
             X_fpcomp = pca.fit_transform(X_fencode)
             plt.figure(figsize=(20,10))
             plt.plot(np.arange(1,21),pca.explained_variance_ratio_)
-            plt.save('./plot/SpectralPlot_ENCODE_SIZE{}_{}.png'.format(ENCODE_SIZE,i))
+            plt.savefig('./plot/SpectralPlot_ENCODE_SIZE{}_{}.png'.format(ENCODE_SIZE,i))
             plt.figure(figsize=(20,10))
             plt.plot(np.arange(1,X_forward.shape[1]+1),X_fpcomp[:,0])
             plt.savefig('./plot/TrajectoryPlot_ENCODE_SIZE{}_{}.png'.format(ENCODE_SIZE,i))
