@@ -94,7 +94,7 @@ class DrawARE(ARE):
             plt.save('./plot/SpectralPlot_ENCODE_SIZE{}_{}.png'.format(ENCODE_SIZE,i))
             plt.figure(figsize=(20,10))
             plt.plot(np.arange(1,X_forward.shape[1]+1),X_fpcomp[:,0])
-            plt.save('./plot/TrajectoryPlot_ENCODE_SIZE{}_{}.png'.format(ENCODE_SIZE,i))
+            plt.savefig('./plot/TrajectoryPlot_ENCODE_SIZE{}_{}.png'.format(ENCODE_SIZE,i))
 # main part
 lena_are = DrawARE()
 lena_are.load_pretrained_model()
