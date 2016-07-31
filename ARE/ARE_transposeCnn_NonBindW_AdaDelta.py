@@ -17,11 +17,13 @@ import theano
 import theano.tensor as T
 import time
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-LABEL = sys.argv[1] if len(sys.argv) > 1 else '0'
-ENCODE_SIZE = int(sys.argv[2]) if len(sys.argv) > 2 else 64
-WEIGHT_FILE_NAME = './weights/ARE_transposeConv_linearLayer_NonBindW_AdaGrad_encode_size{}'.format(ENCODE_SIZE)+'.npz'
+ENCODE_SIZE = int(sys.argv[1]) if len(sys.argv) > 1 else 64
+LAMBDA1 = int(sys.argv[2]) if len(sys.argv) > 2 else 6
+lambda1 = 1.0/10**LAMBDA1
+WEIGHT_FILE_NAME = './weights/linearLayer_NonBindW_encode_size{}_l1{}'.format(ENCODE_SIZE,LAMBDA1)+'.npz'
 
 with np.load('./data/lena_data.npz') as f:
             data = [f['arr_%d' % i] for i in range(len(f.files))]
@@ -69,7 +71,7 @@ def build_ARE(input_var=None, encode_size = 64):
     return reshape3
 #
 class ARE(object):
-    def __init__(self):
+    def __init__(self, lambda1 = 1e-6):
         self.input_var = T.tensor4('inputs')
         self.target_var = T.matrix('targets')
         self.are_net = build_ARE(self.input_var, ENCODE_SIZE)
@@ -78,9 +80,9 @@ class ARE(object):
         self.action_layer, _ = get_layer_by_name(self.are_net, 'action')
         self.encoded_feature = lasagne.layers.get_output(self.encode_layer)
         self.transformed_feature = lasagne.layers.get_output(self.action_layer)
-        self.l1_penalty = regularize_network_params(self.are_net, l1)
+        self.l1_penalty = l1(self.encoded_feature)/ENCODE_SIZE + l1(self.transformed_feature)/ENCODE_SIZE
         self.loss = lasagne.objectives.squared_error(self.reconstructed, self.target_var)
-        self.loss = self.loss.mean()
+        self.loss = self.loss.mean() + lambda1 * self.l1_penalty
         self.params = lasagne.layers.get_all_params(self.are_net, trainable=True)
         self.updates = lasagne.updates.adadelta(self.loss, self.params)
         self.train_fn = theano.function([self.input_var, self.target_var], self.loss, updates=self.updates,on_unused_input='warn')
@@ -154,10 +156,38 @@ class ARE(object):
                     self.best_err = train_err
                     print('save best model which has train_err: {:.7f}'.format(self.best_err))
                     np.savez(WEIGHT_FILE_NAME, *lasagne.layers.get_all_param_values(self.are_net))
+#
+class DrawARE(ARE):
+    def __init__(self, lambda1):
+        super(DrawARE, self).__init__(lambda1)
+        self.feature = theano.function([self.input_var], self.encoded_feature)
+
+    def get_feature(self,input_data):
+        return self.feature(input_data)
+
+    def draw_trajectory(self, num):
+        arr = np.arange(X_forward.shape[0])
+        np.random.shuffle(arr)
+        t_list = arr[:num]
+        for i in t_list:
+            X_fencode = self.get_feature(X_forward[i])
+            X_bencode = self.get_feature(X_backward[i])
+            pca = PCA(10)
+            X_fpcomp = pca.fit_transform(X_fencode)
+            X_bpcomp = pca.transform(X_bencode)
+            plt.figure(figsize=(20,10))
+            plt.plot(np.arange(1,11),pca.explained_variance_ratio_)
+            plt.savefig('./plot/SpectralPlot_linearLayer_NonBindW_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
+            plt.figure(figsize=(20,10))
+            plt.plot(np.arange(1,X_forward.shape[1]+X_backward.shape[1]+1),np.r_[X_fpcomp[:,0],X_bpcomp[:,0]])
+            plt.savefig('./plot/SpectralPlot_linearLayer_NonBindW_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
+#
+
 # main part
 if __name__ == '__main__':
-    lena_are = ARE()
+    lena_are = DrawARE(lambda1)
     lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
     lena_are.load_pretrained_model()
     lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
     lena_are.load_pretrained_model()
+    lena_are.draw_trajectory(4)

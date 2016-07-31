@@ -17,6 +17,8 @@ import theano
 import theano.tensor as T
 import time
 import matplotlib
+matplotlib.use('Agg')
+
 import matplotlib.pyplot as plt
 
 LABEL = sys.argv[1] if len(sys.argv) > 1 else '0'
@@ -73,7 +75,6 @@ class ARE(object):
         self.reconstructed = lasagne.layers.get_output(self.are_net)
         self.action_layer, _ = get_layer_by_name(self.are_net, 'action')
         self.loss = lasagne.objectives.squared_error(self.reconstructed, self.target_var)
-        self.loss = self.loss.mean()
         self.loss = self.loss.mean()
         self.params = lasagne.layers.get_all_params(self.are_net, trainable=True)
         self.updates = lasagne.updates.adadelta(self.loss, self.params)
