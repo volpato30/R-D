@@ -74,7 +74,7 @@ def build_ARE(input_var=None, encode_size = 64):
 class DrawARE(ARE):
     def __init__(self):
         super(DrawARE, self).__init__()
-        self.feature = theano.function([self.input_var], self.encoded_feature, on_unused_input='warn')
+        self.feature = theano.function([self.input_var], self.encoded_feature)
 
     def get_feature(self,input_data):
         return self.feature(input_data)

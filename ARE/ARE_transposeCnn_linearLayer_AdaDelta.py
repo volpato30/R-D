@@ -164,8 +164,9 @@ class ARE(object):
                     print('save best model which has train_err: {:.7f}'.format(self.best_err))
                     np.savez(WEIGHT_FILE_NAME, *lasagne.layers.get_all_param_values(self.are_net))
 # main part
-lena_are = ARE()
-lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
-lena_are.load_pretrained_model()
-lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
-lena_are.load_pretrained_model()
+if __name__ == '__main__':
+    lena_are = ARE()
+    lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
+    lena_are.load_pretrained_model()
+    lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
+    lena_are.load_pretrained_model()
