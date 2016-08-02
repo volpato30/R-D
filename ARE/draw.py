@@ -56,7 +56,7 @@ class DrawARE(ARE):
             plt.savefig('./plot/SpectralPlot_linearLayer_NonBindW_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
             plt.figure(figsize=(20,10))
             plt.plot(np.arange(1,X_forward.shape[1]+X_backward.shape[1]+1),np.r_[X_fpcomp[:,0],X_bpcomp[:,0]])
-            plt.savefig('./plot/SpectralPlot_linearLayer_NonBindW_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
+            plt.savefig('./plot/TrajectoryPlot_linearLayer_NonBindW_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
 # main part
 lena_are = DrawARE(lambda1)
 lena_are.load_pretrained_model()
