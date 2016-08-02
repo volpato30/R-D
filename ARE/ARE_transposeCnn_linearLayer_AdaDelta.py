@@ -19,6 +19,7 @@ import time
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
 
 ENCODE_SIZE = int(sys.argv[1]) if len(sys.argv) > 1 else 64
 LAMBDA1 = int(sys.argv[2]) if len(sys.argv) > 2 else 6
