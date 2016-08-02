@@ -20,13 +20,13 @@ import matplotlib
 matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
-from ARE_transposeCnn_NonBindW_AdaDelta import ARE, get_layer_by_name, build_ARE
+from ARE_transposeCnn_linearLayer_AdaDelta import ARE, get_layer_by_name, build_ARE
 from sklearn.decomposition import PCA
 
 ENCODE_SIZE = int(sys.argv[1]) if len(sys.argv) > 1 else 64
 LAMBDA1 = int(sys.argv[2]) if len(sys.argv) > 2 else 6
 lambda1 = 1.0/10**LAMBDA1
-WEIGHT_FILE_NAME = './weights/linearLayer_NonBindW_encode_size{}_l1{}'.format(ENCODE_SIZE,LAMBDA1)+'.npz'
+WEIGHT_FILE_NAME = './weights/linearLayer_BindW_encode_size{}_l1{}'.format(ENCODE_SIZE,LAMBDA1)+'.npz'
 
 with np.load('./data/lena_data.npz') as f:
             data = [f['arr_%d' % i] for i in range(len(f.files))]
@@ -53,10 +53,10 @@ class DrawARE(ARE):
             X_bpcomp = pca.transform(X_bencode)
             plt.figure(figsize=(20,10))
             plt.plot(np.arange(1,11),pca.explained_variance_ratio_)
-            plt.savefig('./plot/SpectralPlot_linearLayer_NonBindW_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
+            plt.savefig('./plot/SpectralPlot_linearLayer_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
             plt.figure(figsize=(20,10))
             plt.plot(np.arange(1,X_forward.shape[1]+X_backward.shape[1]+1),np.r_[X_fpcomp[:,0],X_bpcomp[:,0]])
-            plt.savefig('./plot/TrajectoryPlot_linearLayer_NonBindW_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
+            plt.savefig('./plot/TrajectoryPlot_linearLayer_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
 # main part
 lena_are = DrawARE(lambda1)
 lena_are.load_pretrained_model()
