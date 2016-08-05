@@ -130,7 +130,7 @@ X_flat_test = X_test.reshape(X_test.shape[0],-1)
 def train_and_eval( model, train_x, train_y, test_x, test_y ):
     model.fit( train_x, train_y )
     p = model.predict( test_x )
-    OA = sum(test_y==p)/len(test_y)
+    OA = sum(test_y==p)/float(len(test_y))
     return OA
 # svm=SVC(kernel='linear',C=1,shrinking=False)
 # svm_auc = train_and_eval( svm, X_flat_train, Y_train,  X_flat_test, Y_test )

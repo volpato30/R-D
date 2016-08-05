@@ -12,3 +12,8 @@ sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_32_6.log p
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_64_4.log python -u ARE_transposeCnn_NonBindW_AdaDelta.py 64 4
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_64_5.log python -u ARE_transposeCnn_NonBindW_AdaDelta.py 64 5
 sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_64_6.log python -u ARE_transposeCnn_NonBindW_AdaDelta.py 64 6
+
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_sgd_1_5.log python -u ARE_transposeCnn_linearLayer_AdaDelta.py 1 5
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_BindW_sgd_1_4.log python -u ARE_transposeCnn_linearLayer_AdaDelta.py 1 4
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_1_4.log python -u ARE_transposeCnn_NonBindW_AdaDelta.py 1 4
+sqsub -q gpu -r 2d --mpp 200G -o ./log/transposeCNN_NonBindW_AdaDelta_1_5.log python -u ARE_transposeCnn_NonBindW_AdaDelta.py 1 5
