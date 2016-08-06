@@ -9,7 +9,7 @@ import pickle
 from lasagne.regularization import regularize_layer_params, l2, l1
 import sys
 
-N_HIDDEN = 128
+N_HIDDEN = 256
 # Number of training sequences in each batch
 N_BATCH = 2000
 # Optimization learning rate
@@ -59,8 +59,7 @@ def main(num_epochs=500):
     # (batch size, max sequence length, number of features)
     l_in = lasagne.layers.InputLayer(shape=(N_BATCH, SHAPE[1], SHAPE[2]))
 
-    l_forward = lasagne.layers.LSTMLayer(
-        lasagne.layers.DropoutLayer(l_in), N_HIDDEN, grad_clipping=GRAD_CLIP, only_return_final=True)
+    l_forward = lasagne.layers.LSTMLayer(l_in, N_HIDDEN, grad_clipping=GRAD_CLIP, only_return_final=True)
     # Our output layer is a simple dense connection, with 1 output unit
     l_out = lasagne.layers.DenseLayer(
         lasagne.layers.DropoutLayer(l_forward), num_units=1, nonlinearity=lasagne.nonlinearities.tanh)
@@ -74,7 +73,7 @@ def main(num_epochs=500):
 
     all_params = lasagne.layers.get_all_params(l_out)
     print("Computing updates ...")
-    updates = lasagne.updates.adadelta(loss, all_params)
+    updates = lasagne.updates.rmsprop(loss, all_params)
     # Theano functions for training and computing cost
     print("Compiling functions ...")
     train = theano.function([l_in.input_var, target_values],
@@ -115,7 +114,7 @@ def main(num_epochs=500):
             print("  validation loss:\t\t{:.6f}".format(val_err))
     except KeyboardInterrupt:
         pass
-    print('best model appear at epoch {}\n\n'.format(flag))
+    print('best model appear at epoch {}\n\n'.format(flag+1))
     test_err = 0
     test_batches = 0
     for batch in iterate_minibatches(test_data, test_label, N_BATCH):
