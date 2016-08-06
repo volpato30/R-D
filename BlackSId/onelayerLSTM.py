@@ -111,7 +111,7 @@ def main(num_epochs=500):
             print("  validation loss:\t\t{:.6f}".format(val_err))
     except KeyboardInterrupt:
         pass
-    print('best model appear at epoch {}\n\n'.format{flag})
+    print('best model appear at epoch {}\n\n'.format(flag))
     test_err = 0
     test_batches = 0
     for batch in iterate_minibatches(test_data, test_label, N_BATCH):
