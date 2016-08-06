@@ -6,12 +6,8 @@ import theano
 import theano.tensor as T
 import lasagne
 import pickle
-from label_data import label_data
-from iterate_minibatch import iterate_minibatches
 from lasagne.regularization import regularize_layer_params, l2, l1
 import sys
-
-lamda = 0.5
 
 N_HIDDEN = 128
 # Number of training sequences in each batch
