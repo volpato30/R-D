@@ -27,6 +27,10 @@ with open('/work/rqiao/HFdata/MLdata/data.p', 'rb') as f:
     train_label = pickle.load(f)
     test_data = pickle.load(f)
     test_label = pickle.load(f)
+train_data = train_data.astype(np.float32)
+train_label = train_label.astype(np.float32)
+test_data = test_data.astype(np.float32)
+test_label = test_label.astype(np.float32)
 train_label = train_label.flatten()
 test_label = test_label.flatten()
 SHAPE = train_data.shape
