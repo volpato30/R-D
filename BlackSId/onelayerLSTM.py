@@ -65,7 +65,7 @@ def main(num_epochs=500):
     test_prediction = lasagne.layers.get_output(l_out,deterministic=True)
     loss = lasagne.objectives.squared_error(prediction, target_values)
     loss = loss.mean()
-    test.loss = lasagne.objectives.squared_error(test_prediction, target_values)
+    test_loss = lasagne.objectives.squared_error(test_prediction, target_values)
     test_loss = test_loss.mean()
 
     all_params = lasagne.layers.get_all_params(l_out)
