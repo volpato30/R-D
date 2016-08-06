@@ -137,8 +137,8 @@ def train_and_eval( model, train_x, train_y, test_x, test_y ):
 # print 'benchmark accuracy: \t\t{:.2f} %'.format(100*svm_auc))
 
 
-num_conv = 32
-mid_neurons = 256
+num_conv = 64
+mid_neurons = 1024
 
 
 # In[ ]:
@@ -180,8 +180,8 @@ randc = RandomCNN()
 for i in range(5):
     randc.experiment()
 
-num_conv = 32
-mid_neurons = 512
+num_conv = 128
+mid_neurons = 8096
 randc = RandomCNN()
 for i in range(5):
     randc.experiment()
