@@ -64,7 +64,7 @@ def main(num_epochs=500):
     # Our output layer is a simple dense connection, with 1 output unit
     l_out = lasagne.layers.DenseLayer(
         lasagne.layers.DropoutLayer(l_forward), num_units=1, nonlinearity=lasagne.nonlinearities.tanh)
-    target_values = T.ivector('target_output')
+    target_values = T.vector('target_output')
     prediction = lasagne.layers.get_output(l_out)
     test_prediction = lasagne.layers.get_output(l_out,deterministic=True)
     loss = lasagne.objectives.squared_error(prediction, target_values)
