@@ -1,0 +1,1 @@
+sqsub -q gpu -r 2d --mpp 200G -o ./log/onelayerLSTM.log python -u onelayerLSTM.py 500
