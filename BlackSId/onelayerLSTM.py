@@ -73,7 +73,7 @@ def main(num_epochs=500):
 
     all_params = lasagne.layers.get_all_params(l_out)
     print("Computing updates ...")
-    updates = lasagne.updates.rmsprop(loss, all_params)
+    updates = lasagne.updates.adadelta(loss, all_params)
     # Theano functions for training and computing cost
     print("Compiling functions ...")
     train = theano.function([l_in.input_var, target_values],
