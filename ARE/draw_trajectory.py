@@ -47,8 +47,8 @@ class DrawARE(ARE):
 
     def get_action1_prediction(self, input_data):
         self.set_action_layer(1)
-        predicted_img = get_prediction(input_data)
-        predicted_img = prediction.reshape(input_data.shape[0],72,72)
+        predicted_img = self.get_prediction(input_data)
+        predicted_img = predicted_img.reshape(input_data.shape[0],72,72)
         np.savez('./data/predicted_img_size{}_l1{}'.format(ENCODE_SIZE,LAMBDA1)+'.npz',predicted_img)
 
     def draw_trajectory(self, num):
