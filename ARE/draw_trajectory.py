@@ -31,6 +31,7 @@ WEIGHT_FILE_NAME = './weights/linearLayer_NonBindW_encode_size{}_l1{}'.format(EN
 with np.load('./data/lena50_50.npz') as f:
             data = [f['arr_%d' % i] for i in range(len(f.files))]
 X_forward, X_forward_out, X_backward, X_backward_out = data
+X_forward = X_forward.astype(np.float32)
 # X_forward shape : (40,1,72,72)
 
 class DrawARE(ARE):
