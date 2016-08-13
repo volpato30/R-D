@@ -71,4 +71,4 @@ class DrawARE(ARE):
 lena_are = DrawARE(lambda1)
 lena_are.load_pretrained_model()
 lena_are.get_action1_prediction(X_forward)
-print 'success'
+print('success')
