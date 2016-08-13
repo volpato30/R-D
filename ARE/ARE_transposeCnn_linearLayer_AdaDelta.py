@@ -25,6 +25,8 @@ ENCODE_SIZE = int(sys.argv[1]) if len(sys.argv) > 1 else 64
 LAMBDA1 = int(sys.argv[2]) if len(sys.argv) > 2 else 6
 lambda1 = 1.0/10**LAMBDA1
 WEIGHT_FILE_NAME = './weights/linearLayer_BindW_encode_size{}_l1{}'.format(ENCODE_SIZE,LAMBDA1)+'.npz'
+ACION_FILE_NAME = './weights/ActionWeights_BindW_encode_size{}_l1{}'.format(ENCODE_SIZE,LAMBDA1)+'.npz'
+
 
 with np.load('./data/lena_data.npz') as f:
             data = [f['arr_%d' % i] for i in range(len(f.files))]
@@ -97,10 +99,18 @@ class ARE(object):
         # self.action4_w = np.eye(ENCODE_SIZE, dtype = np.float32)
         # self.action4_b = np.zeros(ENCODE_SIZE, dtype = np.float32)
 
+    def _load_pretrained_model(self, file_name=WEIGHT_FILE_NAME, action_name=ACION_FILE_NAME):
+        with np.load(file_name) as f:
+            param_values = [f['arr_%d' % i] for i in range(len(f.files))]
+        lasagne.layers.set_all_param_values(self.are_net, param_values)
+
     def load_pretrained_model(self, file_name=WEIGHT_FILE_NAME):
         with np.load(file_name) as f:
             param_values = [f['arr_%d' % i] for i in range(len(f.files))]
         lasagne.layers.set_all_param_values(self.are_net, param_values)
+        with np.load(action_name) as f:
+                    data = [f['arr_%d' % i] for i in range(len(f.files))]
+        self.action1_w,self.action1_b,self.action2_w,self.action2_b = data
 
     def set_action_layer(self, action_id):
         if action_id == 1:
@@ -161,6 +171,7 @@ class ARE(object):
                     self.best_err = train_err
                     print('save best model which has train_err: {:.7f}'.format(self.best_err))
                     np.savez(WEIGHT_FILE_NAME, *lasagne.layers.get_all_param_values(self.are_net))
+                    np.savez(ACION_FILE_NAME, self.action1_w,self.action1_b,self.action2_w,self.action2_b)
 #DrawARE class
 class DrawARE(ARE):
     def __init__(self, lambda1):
@@ -190,8 +201,7 @@ class DrawARE(ARE):
 # main part
 if __name__ == '__main__':
     lena_are = DrawARE(lambda1)
-    lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
-    lena_are.load_pretrained_model()
+    lena_are._load_pretrained_model()
     lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
     lena_are.load_pretrained_model()
     lena_are.draw_trajectory(4)
