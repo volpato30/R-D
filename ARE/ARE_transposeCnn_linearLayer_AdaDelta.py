@@ -104,7 +104,7 @@ class ARE(object):
             param_values = [f['arr_%d' % i] for i in range(len(f.files))]
         lasagne.layers.set_all_param_values(self.are_net, param_values)
 
-    def load_pretrained_model(self, file_name=WEIGHT_FILE_NAME):
+    def load_pretrained_model(self, file_name=WEIGHT_FILE_NAME, action_name=ACION_FILE_NAME):
         with np.load(file_name) as f:
             param_values = [f['arr_%d' % i] for i in range(len(f.files))]
         lasagne.layers.set_all_param_values(self.are_net, param_values)
