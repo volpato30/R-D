@@ -41,7 +41,7 @@ class DrawARE(ARE):
 
     def get_feature(self,input_data):
         return self.feature(input_data)
-
+    #
     def draw_trajectory(self, num):
         arr = np.arange(X_forward.shape[0])
         np.random.shuffle(arr)
@@ -52,16 +52,16 @@ class DrawARE(ARE):
             pca = PCA(10)
             X_fpcomp = pca.fit_transform(X_fencode)
             X_bpcomp = pca.transform(X_bencode)
-            plt.subplot(2, 1, 1)
-            plt.plot(np.arange(1,11),pca.explained_variance_ratio_, 'ko-')
-            plt.xlabel('Index of Principle Components')
-            plt.ylabel('Proportion of Total Variation')
-            plt.subplot(2, 1, 2)
-            plt.plot(np.arange(1,61),np.r_[X_fpcomp[:,0],X_bpcomp[:20,0]],'b.-')
-            plt.xlabel('time')
-            plt.ylabel('Position on the first Principle Components')
-            plt.savefig('./plot/new/NonBind_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
-# main part
+            fig = plt.figure(figsize=(20,10))
+            ax1 = fig.add_subplot(2, 1, 1)
+            ax1.plot(np.arange(1,11),pca.explained_variance_ratio_, 'ko-')
+            ax1.set_xlabel('Index of Principle Components')
+            ax1.set_ylabel('Proportion of Total Variation')
+            ax2 = fig.add_subplot(2, 1, 2)
+            ax2.plot(np.arange(1,61),np.r_[X_fpcomp[:,0],X_bpcomp[:20,0]],'b.-')
+            ax2.set_xlabel('time')
+            ax2.set_ylabel('Position on the first Principle Components')
+            plt.savefig('./plot/new/Bind_encode_size{}_l1{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))# main part
 lena_are = DrawARE(lambda1)
 lena_are.load_pretrained_model()
 lena_are.draw_trajectory(10)
