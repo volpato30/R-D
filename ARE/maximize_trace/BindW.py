@@ -205,7 +205,8 @@ class DrawARE(ARE):
 # main part
 if __name__ == '__main__':
     lena_are = DrawARE(lambda1)
-    lena_are._load_pretrained_model()
     lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
+    lena_are.load_pretrained_model()
+    lena_are.train_ARE_network(num_epochs=2000, verbose = True, save_model = True)
     lena_are.load_pretrained_model()
     lena_are.draw_trajectory(4)
