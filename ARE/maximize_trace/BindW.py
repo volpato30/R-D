@@ -12,7 +12,7 @@ from lasagne.layers import Conv2DLayer, TransposedConv2DLayer, ReshapeLayer, Den
 from lasagne.layers import get_output, Upscale2DLayer
 from lasagne.nonlinearities import rectify, leaky_rectify, tanh
 from lasagne.updates import nesterov_momentum
-from lasagne.regularization import regularize_network_params,regularize_layer_params
+from lasagne.regularization import regularize_network_params,regularize_layer_params,l1,l2
 import theano
 import theano.tensor as T
 import time
@@ -22,10 +22,13 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 
 ENCODE_SIZE = int(sys.argv[1]) if len(sys.argv) > 1 else 64
-LAMBDA1 = int(sys.argv[2]) if len(sys.argv) > 2 else 6
+LAMBDA1 = int(sys.argv[2]) if len(sys.argv) > 2 else 5
+LAMBDA2 = int(sys.argv[3]) if len(sys.argv) > 3 else 5
+
 lambda1 = 1.0/10**LAMBDA1
-WEIGHT_FILE_NAME = './weights/BindW_encode_size{}_lambda{}'.format(ENCODE_SIZE,LAMBDA1)+'.npz'
-ACION_FILE_NAME = './weights/Action_BindW_encode_size{}_lambda{}'.format(ENCODE_SIZE,LAMBDA1)+'.npz'
+lambda2 = 1.0/10**LAMBDA2
+WEIGHT_FILE_NAME = './weights/BindW_encode_size{}_lambda1:{}_lambda2:{}'.format(ENCODE_SIZE,LAMBDA1,LAMBDA2)+'.npz'
+ACION_FILE_NAME = './weights/Action_BindW_encode_size{}_lambda1:{}_lambda2:{}'.format(ENCODE_SIZE,LAMBDA1,LAMBDA2)+'.npz'
 
 
 with np.load('../data/lena_data.npz') as f:
@@ -74,7 +77,7 @@ def build_ARE(input_var=None, encode_size = 64):
     return reshape3
 #
 class ARE(object):
-    def __init__(self, lambda1 = 1e-6):
+    def __init__(self, lambda1 = 1e-5, lambda2 = 1e-6):
         self.input_var = T.tensor4('inputs')
         self.target_var = T.matrix('targets')
         self.are_net = build_ARE(self.input_var, ENCODE_SIZE)
@@ -84,8 +87,9 @@ class ARE(object):
         self.encoded_feature = lasagne.layers.get_output(self.encode_layer)
         self.transformed_feature = lasagne.layers.get_output(self.action_layer)
         self.XXT = T.dot(self.encoded_feature, self.encoded_feature.transpose())
+        self.l1_penalty = regularize_network_params(self.are_net,l1)
         self.loss = lasagne.objectives.squared_error(self.reconstructed, self.target_var)
-        self.loss = self.loss.mean() - lambda1 * self.XXT.trace()
+        self.loss = 1000*self.loss.mean() - lambda1 * self.XXT.trace() + lambda2 * self.l1_penalty
         self.params = lasagne.layers.get_all_params(self.are_net, trainable=True)
         self.updates = lasagne.updates.adadelta(self.loss, self.params)
         self.train_fn = theano.function([self.input_var, self.target_var], self.loss, updates=self.updates,on_unused_input='warn')
@@ -200,13 +204,11 @@ class DrawARE(ARE):
             ax2.plot(np.arange(1,61),np.r_[X_fpcomp[:,0],X_bpcomp[:20,0]],'b.-')
             ax2.set_xlabel('time')
             ax2.set_ylabel('Position on the first Principle Components')
-            plt.savefig('./plot/Bind_encode_size{}_lambda{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,i))
+            plt.savefig('./plot/Bind_encode_size{}_lambda1:{}_lambda2:{}_index{}.png'.format(ENCODE_SIZE,LAMBDA1,LAMBDA2,i))
 # main part
 # main part
 if __name__ == '__main__':
     lena_are = DrawARE(lambda1)
-    lena_are.train_ARE_network(num_epochs=3000, verbose = True, save_model = True)
-    lena_are.load_pretrained_model()
     lena_are.train_ARE_network(num_epochs=2000, verbose = True, save_model = True)
     lena_are.load_pretrained_model()
     lena_are.draw_trajectory(4)
