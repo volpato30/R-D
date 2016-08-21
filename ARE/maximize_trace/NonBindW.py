@@ -85,7 +85,7 @@ class ARE(object):
         self.transformed_feature = lasagne.layers.get_output(self.action_layer)
         self.XXT = T.dot(self.encoded_feature, self.encoded_feature.transpose())
         self.loss = lasagne.objectives.squared_error(self.reconstructed, self.target_var)
-        self.loss = self.loss.mean() + lambda1 * self.XXT.trace()
+        self.loss = self.loss.mean() - lambda1 * self.XXT.trace()
         self.params = lasagne.layers.get_all_params(self.are_net, trainable=True)
         self.updates = lasagne.updates.adadelta(self.loss, self.params)
         self.train_fn = theano.function([self.input_var, self.target_var], self.loss, updates=self.updates,on_unused_input='warn')
