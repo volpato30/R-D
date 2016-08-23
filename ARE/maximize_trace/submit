@@ -13,3 +13,7 @@ sqsub -q gpu -r 2d --mpp 200G -o ./log/NonBindW_AdaDelta_64_5_5.log python -u No
 sqsub -q gpu -r 2d --mpp 200G -o ./log/NonBindW_AdaDelta_64_6_6.log python -u NonBindW.py 64 6 6
 sqsub -q gpu -r 2d --mpp 200G -o ./log/NonBindW_AdaDelta_32_5_6.log python -u NonBindW.py 64 5 6
 sqsub -q gpu -r 2d --mpp 200G -o ./log/NonBindW_AdaDelta_32_6_5.log python -u NonBindW.py 64 6 5
+
+sqsub -q gpu -r 2d --mpp 200G -o ./log/BindW_Adadelta_64_6_4.log python -u BindW.py 64 6 4
+sqsub -q gpu -r 2d --mpp 200G -o ./log/BindW_Adadelta_64_6_3.log python -u BindW.py 64 6 3
+sqsub -q gpu -r 2d --mpp 200G -o ./log/BindW_Adadelta_64_6_2.log python -u BindW.py 64 6 2
