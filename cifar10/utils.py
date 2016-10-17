@@ -1,5 +1,6 @@
+from __future__ import print_function
 import random
-import cPickle
+import pickle as cPickle
 import numpy as np
 
 from sklearn.utils import shuffle
@@ -21,15 +22,15 @@ def load_pickle_data_cv():
     fo_3 = open('cifar-10-batches-py/data_batch_3', 'rb')
     fo_4 = open('cifar-10-batches-py/data_batch_4', 'rb')
     fo_5 = open('cifar-10-batches-py/data_batch_5', 'rb')
-    dict_1 = cPickle.load(fo_1)
+    dict_1 = cPickle.load(fo_1, encoding='latin1')
     fo_1.close()
-    dict_2 = cPickle.load(fo_2)
+    dict_2 = cPickle.load(fo_2, encoding='latin1')
     fo_2.close()
-    dict_3 = cPickle.load(fo_3)
+    dict_3 = cPickle.load(fo_3, encoding='latin1')
     fo_3.close()
-    dict_4 = cPickle.load(fo_4)
+    dict_4 = cPickle.load(fo_4, encoding='latin1')
     fo_4.close()
-    dict_5 = cPickle.load(fo_5)
+    dict_5 = cPickle.load(fo_5, encoding='latin1')
     fo_5.close()
     data_1 = dict_1['data']
     data_2 = dict_2['data']
@@ -54,7 +55,7 @@ def load_pickle_data_cv():
 
     # subtract per-pixel mean
     pixel_mean = np.mean(X_train, axis=0)
-    print pixel_mean
+    print(pixel_mean)
     np.save('pixel_mean.npy', pixel_mean)
     X_train -= pixel_mean
     X_test -= pixel_mean
@@ -63,7 +64,7 @@ def load_pickle_data_cv():
 
 def load_pickle_data_test():
     fo_test = open('cifar-10-batches-py/test_batch', 'rb')
-    dict_test = cPickle.load(fo_test)
+    dict_test = cPickle.load(fo_test, encoding='latin1')
     fo_test.close()
     test_X = dict_test['data']
     test_y = dict_test['labels']
