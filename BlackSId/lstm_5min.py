@@ -4,10 +4,10 @@ import pandas as pd
 from lasagne.regularization import regularize_network_params, l2, l1
 
 with open('/work/rqiao/HFdata/MLdata/normalized_data.plkz', 'rb') as f:
-    X_train = pickle.load(f, encoding='latin1')
-    y_train = pickle.load(f, encoding='latin1')
-    X_test = pickle.load(f, encoding='latin1')
-    y_test = pickle.load(f, encoding='latin1')
+    X_train = pickle.load(f)
+    y_train = pickle.load(f)
+    X_test = pickle.load(f)
+    y_test = pickle.load(f)
 
 import theano
 import theano.tensor as T
