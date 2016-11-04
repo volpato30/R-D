@@ -1,17 +1,17 @@
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 7 16
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 8 16
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 9 16
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 10 16
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 7 32
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 8 32
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 9 32
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 10 32
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 7 64
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 8 64
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 9 64
-sqsub -q gpu -r 2d -o ../out/bn_16.out --mpp 20G python Deep_bottle_neck.py 1024 10 64
+sqsub -q gpu -r 2d -o ../out/bn_7_16.out --mpp 20G python Deep_bottle_neck.py 1024 7 16
+sqsub -q gpu -r 2d -o ../out/bn_8_16.out --mpp 20G python Deep_bottle_neck.py 1024 8 16
+sqsub -q gpu -r 2d -o ../out/bn_9_16.out --mpp 20G python Deep_bottle_neck.py 1024 9 16
+sqsub -q gpu -r 2d -o ../out/bn_10_16.out --mpp 20G python Deep_bottle_neck.py 1024 10 16
+sqsub -q gpu -r 2d -o ../out/bn_7_32.out --mpp 20G python Deep_bottle_neck.py 1024 7 32
+sqsub -q gpu -r 2d -o ../out/bn_8_32.out --mpp 20G python Deep_bottle_neck.py 1024 8 32
+sqsub -q gpu -r 2d -o ../out/bn_9_32.out --mpp 20G python Deep_bottle_neck.py 1024 9 32
+sqsub -q gpu -r 2d -o ../out/bn_10_32.out --mpp 20G python Deep_bottle_neck.py 1024 10 32
+sqsub -q gpu -r 2d -o ../out/bn_7_64.out --mpp 20G python Deep_bottle_neck.py 1024 7 64
+sqsub -q gpu -r 2d -o ../out/bn_8_64.out --mpp 20G python Deep_bottle_neck.py 1024 8 64
+sqsub -q gpu -r 2d -o ../out/bn_9_64.out --mpp 20G python Deep_bottle_neck.py 1024 9 64
+sqsub -q gpu -r 2d -o ../out/bn_10_64.out --mpp 20G python Deep_bottle_neck.py 1024 10 64
 
-sqsub -q gpu -r 2d -o ../out/bn_32.out --mpp 20G python Full_model.py 1024 7
-sqsub -q gpu -r 2d -o ../out/bn_32.out --mpp 20G python Full_model.py 1024 8
-sqsub -q gpu -r 2d -o ../out/bn_32.out --mpp 20G python Full_model.py 1024 9
-sqsub -q gpu -r 2d -o ../out/bn_32.out --mpp 20G python Full_model.py 1024 10
+sqsub -q gpu -r 2d -o ../out/full_model_7.out --mpp 20G python Full_model.py 1024 7
+sqsub -q gpu -r 2d -o ../out/full_model_8.out --mpp 20G python Full_model.py 1024 8
+sqsub -q gpu -r 2d -o ../out/full_model_9.out --mpp 20G python Full_model.py 1024 9
+sqsub -q gpu -r 2d -o ../out/full_model_10.out --mpp 20G python Full_model.py 1024 10
