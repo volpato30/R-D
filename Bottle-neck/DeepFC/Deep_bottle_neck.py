@@ -50,10 +50,10 @@ def build_NIN_model(input_var, hidden_neurons=1024, bottle_neck=128, layers=8):
     l_out = DenseLayer(lasagne.layers.DropoutLayer(l_hidden), num_units=10, nonlinearity=lasagne.nonlinearities.softmax, W=lasagne.init.HeNormal(gain='relu'))
     return l_out
 
-def train_bottleneck_model(num_epochs=500, hidden_neurons=1024, bottleneck=128, learn_rate=0.01):
+def train_bottleneck_model(num_epochs=500, hidden_neurons=1024, bottle_neck=128, layers=7 learn_rate=0.01):
     input_var = T.matrix('inputs')
     target_var = T.ivector('targets')
-    network = build_NIN_model(input_var, hidden_neurons, bottleneck)
+    network = build_NIN_model(input_var, hidden_neurons, bottle_neck, layers)
     prediction = lasagne.layers.get_output(network)
     loss = lasagne.objectives.categorical_crossentropy(prediction, target_var)
     #l2_penalty = regularize_network_params(network, l2)

@@ -48,7 +48,7 @@ def build_model(input_var, hidden_neurons=1024, layers=8):
     l_out = DenseLayer(lasagne.layers.DropoutLayer(l_hidden), num_units=10, nonlinearity=lasagne.nonlinearities.softmax, W=lasagne.init.HeNormal())
     return l_out
 
-def train_original_model(num_epochs=500, hidden_neurons=1024, layes=8, learn_rate=0.01):
+def train_original_model(num_epochs=500, hidden_neurons=1024, layers=8, learn_rate=0.01):
     input_var = T.matrix('inputs')
     target_var = T.ivector('targets')
     network = build_model(input_var, hidden_neurons, layers)
