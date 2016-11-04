@@ -7,7 +7,6 @@ import theano.tensor as T
 import lasagne
 from theano.tensor.signal import pool
 from theano.tensor.nnet import conv2d
-from logistic_sgd import load_data
 from lasagne.layers import get_output, InputLayer, DenseLayer, Upscale2DLayer, ReshapeLayer
 from lasagne.regularization import regularize_network_params, l2, l1
 import gzip
